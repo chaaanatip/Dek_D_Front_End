@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+import { ref } from "vue"
+import banner from "../components/Main.vue"
+
+</script>
 <template>
   <div class="w-full">
     <img
