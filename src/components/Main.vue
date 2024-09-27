@@ -21,6 +21,11 @@ const createBook = () => {
   const newId = books.value.length + 1
   books.value.push(newBook.value)
 }
+const handleCreate = () => {
+  toggleCreate()
+  createModal.showModal()
+}
+console.log(books.value)
 </script>
 
 <template>
@@ -32,7 +37,7 @@ const createBook = () => {
         <div class="flex justify-between items-center mt-5">
           <p>จำนวนทั้งหมด: {{ books.length }}</p>
           <div class="flex space-x-3">
-            <button @click="toggleCreate" class="btn bg-cyan-300 rounded-3xl">
+            <button @click="handleCreate" class="btn bg-cyan-300 rounded-3xl">
               Create
             </button>
 
@@ -53,113 +58,35 @@ const createBook = () => {
           </div>
         </div>
         <div>
-          <div class="flex mt-5">
+          <div v-for="(book, index) in books" :key="index" class="flex mt-5">
             <img
-              src="https://img.freepik.com/free-vector/paper-branding-mockup-vector-set_53876-62032.jpg?w=826&t=st=1727369100~exp=1727369700~hmac=2574660bbd30809193ba104a4b929c8b7e8a18faacdc169710077c9fde0709a7"
+              :src="books.imageUrl"
               alt=""
               class="w-[100px] h-[150px] rounded-[10px]"
             />
             <div class="ml-3 pr-10">
-              <p class="font-bold text-xl">
-                นิยายขายดีโดเรม่อน อิอิฟหกดฟหกดฟหกดฟหกด
-              </p>
-              <p>G.lina</p>
-              <p class="mt-5">ตอนที่1: ไฟฉายย่อส่วน</p>
-              <p class="">คั่นล่าสุด 9 ก.ค.63 / 22.56</p>
-            </div>
-          </div>
-          <div class="flex mt-5">
-            <img
-              src="https://img.freepik.com/free-vector/paper-branding-mockup-vector-set_53876-62032.jpg?w=826&t=st=1727369100~exp=1727369700~hmac=2574660bbd30809193ba104a4b929c8b7e8a18faacdc169710077c9fde0709a7"
-              alt=""
-              class="w-[100px] h-[150px] rounded-[10px]"
-            />
-            <div class="ml-3 pr-10">
-              <p class="font-bold text-xl">
-                นิยายขายดีโดเรม่อน อิอิฟหกดฟหกดฟหกดฟหกด
-              </p>
-              <p>G.lina</p>
-              <p class="mt-5">ตอนที่1: ไฟฉายย่อส่วน</p>
-              <p class="">คั่นล่าสุด 9 ก.ค.63 / 22.56</p>
-            </div>
-          </div>
-          <div class="flex mt-5">
-            <img
-              src="https://img.freepik.com/free-vector/paper-branding-mockup-vector-set_53876-62032.jpg?w=826&t=st=1727369100~exp=1727369700~hmac=2574660bbd30809193ba104a4b929c8b7e8a18faacdc169710077c9fde0709a7"
-              alt=""
-              class="w-[100px] h-[150px] rounded-[10px]"
-            />
-            <div class="ml-3 pr-10">
-              <p class="font-bold text-xl">
-                นิยายขายดีโดเรม่อน อิอิฟหกดฟหกดฟหกดฟหกด
-              </p>
-              <p>G.lina</p>
-              <p class="mt-5">ตอนที่1: ไฟฉายย่อส่วน</p>
-              <p class="">คั่นล่าสุด 9 ก.ค.63 / 22.56</p>
+              <p class="font-bold text-xl">{{ book.title }}</p>
+              <p>{{ book.author }}</p>
+              <p class="mt-5">{{ book.chapter }}</p>
+              <p class="">คั่นล่าสุด: 9 ก.ค.63 / 22.56</p>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      v-if="isCreating"
-      class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50"
-    >
-      <div class="bg-white p-6 rounded-lg w-96">
-        <h2 class="text-lg font-bold mb-4">เพิ่มนิยายใหม่</h2>
-        <form @submit.prevent="createBook">
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-2">ชื่อเรื่อง</label>
-            <input
-              type="text"
-              v-model="newBook.title"
-              class="border rounded w-full px-3 py-2"
-              required
-            />
+        <dialog id="createModal" class="modal modal-bottom sm:modal-middle">
+          <div class="modal-box">
+            <h3 class="text-lg font-bold">Create your books</h3>
+            <div>
+              <p class="py-4">Title</p>
+              <input v-model="newBook.title" type="text" class="border
+              border-gray-500 rounded-3xl p-2 w-full"
+            </div>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn">Close</button>
+              </form>
+            </div>
           </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-2">ชื่อนักเขียน</label>
-            <input
-              type="text"
-              v-model="newBook.author"
-              class="border rounded w-full px-3 py-2"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-2">ชื่อตอน</label>
-            <input
-              type="text"
-              v-model="newBook.chapter"
-              class="border rounded w-full px-3 py-2"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-medium mb-2">ลิงก์ภาพ</label>
-            <input
-              type="text"
-              v-model="newBook.imageUrl"
-              class="border rounded w-full px-3 py-2"
-              required
-            />
-          </div>
-          <div class="flex justify-end">
-            <button
-              type="button"
-              @click="toggleCreate"
-              class="mr-2 text-gray-500"
-            >
-              ยกเลิก
-            </button>
-            <button
-              type="submit"
-              class="bg-green-500 text-white rounded px-4 py-2"
-            >
-              เพิ่ม
-            </button>
-          </div>
-        </form>
+        </dialog>
       </div>
     </div>
   </div>
