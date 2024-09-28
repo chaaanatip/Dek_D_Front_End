@@ -26,20 +26,22 @@ const props = defineProps({
       <div class="ml-3 pr-10">
         <p class="font-bold text-xl">{{ book.title }}</p>
         <p class="mt-1">{{ book.author }}</p>
-        <div class="flex items-center mt-10 text-gray-400">
-          <IconList />
-          <p class="ml-2 flex mb-1">{{ book.chapter }}</p>
-        </div>
-        <div class="flex items-center text-gray-400">
-          <IconBookmark />
-          <p class="ml-2 flex mb-1">คั่นล่าสุด {{ date }} / {{ time }} น.</p>
+        <div class="lg:">
+          <div class="flex items-center mt-10 text-gray-400">
+            <IconList />
+            <p class="ml-2 flex mb-1">{{ book.chapter }}</p>
+          </div>
+          <div class="flex items-center text-gray-400">
+            <IconBookmark />
+            <p class="ml-2 flex mb-1">คั่นล่าสุด {{ date }} / {{ time }} น.</p>
+          </div>
         </div>
       </div>
       <input
         v-if="isEditing"
         type="checkbox"
         v-model="selectBooks[index]"
-        class="ml-2"
+        class="ml-2 w-6 h-6"
       />
     </div>
   </div>
