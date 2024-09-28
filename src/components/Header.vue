@@ -1,15 +1,32 @@
 <script setup>
-import { ref } from "vue"
-import banner from "../components/Main.vue"
+import { defineProps } from "vue"
 
+const props = defineProps({
+  imageUrl: String,
+})
 </script>
+
 <template>
-  <div class="w-full">
+  <header class="flex justify-center items-center overflow-hidden">
     <img
-      src="https://www.minecraft.net/content/dam/games/minecraft/key-art/Vanilla-PMP_Collection-Carousel-0_Trails-and-Tales_1280x768.jpg"
-      alt=""
-      class="sm"
+      v-if="imageUrl"
+      :src="imageUrl"
+      alt="Book Cover Banner"
+      class="w-full h-[200px] object-cover"
     />
-  </div>
+  </header>
 </template>
-<style scoped></style>
+
+<style scoped>
+header {
+  background-color: #f8f9fa;
+  margin: 0; /* ลบ margin */
+  padding: 0; /* ลบ padding */
+  position: relative; /* เพื่อรองรับการจัดการ overflow */
+}
+
+html,
+body {
+  height: 100%; /* ตั้งค่าความสูงให้เต็ม */
+}
+</style>

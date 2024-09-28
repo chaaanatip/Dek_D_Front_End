@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from "vue"
 import iconBin from "../components/icons/IconBin.vue"
+import Header from "./Header.vue"
 import IconList from "./icons/IconList.vue"
 import IconBookmark from "./icons/IconBookmark.vue"
+import ModalForm from "./ModalForm.vue"
 
 const date = new Date().toLocaleDateString("th-TH", {
   year: "2-digit",
@@ -30,7 +32,8 @@ const newBook = ref({
   imageUrl: "",
 })
 
-const selectBooks = ref([null])
+const selectBooks = ref([])
+
 const books = ref([])
 
 const createBook = () => {
@@ -43,6 +46,7 @@ const createBook = () => {
     chapter: "",
     imageUrl: "",
   }
+  selectBooks.value.push(false)
   createModal.close()
 }
 const cancelCreate = () => {
@@ -53,11 +57,19 @@ const handleCreate = () => {
   toggleCreate()
   createModal.showModal()
 }
+const deleteSelectedBooks = () => {
+  selectBooks.value.forEach((selected, index) => {
+    if (selected) {
+      books.value.splice(index, 1)
+      selectBooks.value.splice(index, 1)
+    }
+  })
+}
 </script>
 
 <template>
-  <div class="mt-10">
-    <div class="ml-3 font-bold text-xl">รายการที่คั่นไว้</div>
+  <div>
+    <div class="ml-3 font-bold text-xl mt-10">รายการที่คั่นไว้</div>
     <div class="border-b border-gray-300 w-full mt-2"></div>
     <div class="mx-3">
       <div class="flex justify-between items-center mt-5">
@@ -79,7 +91,8 @@ const handleCreate = () => {
             <span class="">{{ isEditing ? "ยกเลิก" : "แก้ไข" }}</span>
           </button>
           <button
-            v-if="isEditing && selectBooks !== null"
+            v-if="isEditing && selectBooks.includes(true)"
+            @click="deleteSelectedBooks"
             class="btn border-gray-500 rounded-3xl"
           >
             <iconBin class="w-5" />
@@ -107,8 +120,15 @@ const handleCreate = () => {
               </p>
             </div>
           </div>
+          <input
+            v-if="isEditing"
+            type="checkbox"
+            v-model="selectBooks[index]"
+            class="ml-2"
+          />
         </div>
       </div>
+      <!-- <ModalForm /> -->
       <dialog id="createModal" class="modal modal-bottom sm:modal-middle">
         <div class="modal-box">
           <form method="dialog" class="space-x-2" @submit.prevent="createBook">
