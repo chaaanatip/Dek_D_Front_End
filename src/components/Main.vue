@@ -1,10 +1,9 @@
 <script setup>
 import { ref } from "vue"
-import iconBin from "../components/icons/IconBin.vue"
-import Header from "./Header.vue"
-import IconList from "./icons/IconList.vue"
-import IconBookmark from "./icons/IconBookmark.vue"
+
+import Button from "./Button.vue"
 import ModalForm from "./ModalForm.vue"
+import Book from "./Book.vue"
 
 const date = new Date().toLocaleDateString("th-TH", {
   year: "2-digit",
@@ -15,46 +14,50 @@ const time = new Date().toLocaleTimeString("th-TH", {
   hour: "2-digit",
   minute: "2-digit",
 })
-console.log(time)
-
 const isEditing = ref(false)
 const toggleEdit = () => {
   isEditing.value = !isEditing.value
 }
-const isCreating = ref(false)
-const toggleCreate = () => {
-  isCreating.value = !isCreating.value
-}
-const newBook = ref({
-  title: "",
-  author: "",
-  chapter: "",
-  imageUrl: "",
-})
-
 const selectBooks = ref([])
-
-const books = ref([])
-
-const createBook = () => {
-  const book = { ...newBook.value }
-
-  books.value.push(book)
-  newBook.value = {
-    title: "",
-    author: "",
-    chapter: "",
-    imageUrl: "",
-  }
-  selectBooks.value.push(false)
-  createModal.close()
-}
-const cancelCreate = () => {
-  createModal.close()
-}
-
+const books = ref([
+  {
+    title: "Elment Online เล่ม 1",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 1 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/OSERx.jpg",
+  },
+  {
+    title: "Elment Online เล่ม 2",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 2 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/XNF3.jpg",
+  },
+  {
+    title: "Elment Online เล่ม 3",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 3 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/AZl2K.jpg",
+  },
+  {
+    title: "Elment Online เล่ม 4",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 4 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/g5L7R.jpg",
+  },
+  {
+    title: "Elment Online เล่ม 5",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 5 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/8DoN.jpg",
+  },
+  {
+    title: "Elment Online เล่ม 6",
+    author: "Season Cloud",
+    chapter: "ตอนที่ 6 : ไฟฉายย่อส่วน",
+    imageUrl: "https://m1r.ai/pEal.jpg",
+  },
+])
 const handleCreate = () => {
-  toggleCreate()
   createModal.showModal()
 }
 const deleteSelectedBooks = () => {
@@ -68,117 +71,30 @@ const deleteSelectedBooks = () => {
 </script>
 
 <template>
-  <div>
+  <div class="px-4 sm:px-8 lg:px-16 xl:px-60">
     <div class="ml-3 font-bold text-xl mt-10">รายการที่คั่นไว้</div>
     <div class="border-b border-gray-300 w-full mt-2"></div>
     <div class="mx-3">
-      <div class="flex justify-between items-center mt-5">
-        <p>จำนวนทั้งหมด: {{ books.length }}</p>
-        <div class="flex space-x-3">
-          <button @click="handleCreate" class="btn bg-cyan-300 rounded-3xl">
-            สร้างหนังสือ
-          </button>
-
-          <button
-            @click="toggleEdit"
-            :class="
-              isEditing
-                ? 'border-gray-500 text-gray-500'
-                : 'bg-orange-200 text-orange-500 '
-            "
-            class="btn rounded-3xl px-5"
-          >
-            <span class="">{{ isEditing ? "ยกเลิก" : "แก้ไข" }}</span>
-          </button>
-          <button
-            v-if="isEditing && selectBooks.includes(true)"
-            @click="deleteSelectedBooks"
-            class="btn border-gray-500 rounded-3xl"
-          >
-            <iconBin class="w-5" />
-          </button>
-        </div>
+      <div class="flex flex-col sm:flex-row justify-between items-center mt-5">
+        <p class="mb-2 sm:mb-0">จำนวนทั้งหมด {{ books.length }} รายการ</p>
+        <Button
+          :isEditing="isEditing"
+          :selectBooks="selectBooks"
+          @handleCreate="handleCreate"
+          @toggleEdit="toggleEdit"
+          @deleteSelectedBooks="deleteSelectedBooks"
+        />
       </div>
-      <div>
-        <div v-for="(book, index) in books" :key="index" class="flex mt-5">
-          <img
-            :src="book.imageUrl"
-            alt=""
-            class="w-[100px] h-[150px] rounded-[10px]"
-          />
-          <div class="ml-3 pr-10">
-            <p class="font-bold text-xl">{{ book.title }}</p>
-            <p class="mt-1">{{ book.author }}</p>
-            <div class="flex items-center mt-10 text-gray-400">
-              <IconList />
-              <p class="ml-2 flex mb-1">{{ book.chapter }}</p>
-            </div>
-            <div class="flex items-center text-gray-400">
-              <IconBookmark />
-              <p class="ml-2 flex mb-1">
-                คั่นล่าสุด {{ date }} / {{ time }} น.
-              </p>
-            </div>
-          </div>
-          <input
-            v-if="isEditing"
-            type="checkbox"
-            v-model="selectBooks[index]"
-            class="ml-2"
-          />
-        </div>
-      </div>
-      <!-- <ModalForm /> -->
-      <dialog id="createModal" class="modal modal-bottom sm:modal-middle">
-        <div class="modal-box">
-          <form method="dialog" class="space-x-2" @submit.prevent="createBook">
-            <h3 class="text-lg font-bold mb-5">Create your books</h3>
-            <div class="items-center space-y-2">
-              <h1>Title</h1>
-              <input
-                v-model="newBook.title"
-                type="text"
-                class="pl-5 border border-gray-500 p-2 w-full rounded-md"
-                required
-              />
-              <h1>Author</h1>
-              <input
-                v-model="newBook.author"
-                type="text"
-                class="pl-5 border border-gray-500 p-2 w-full rounded-md"
-                required
-              />
-              <h1>Chapter</h1>
-              <input
-                v-model="newBook.chapter"
-                type="text"
-                class="pl-5 border border-gray-500 p-2 w-full rounded-md"
-                required
-              />
-              <h1>ImageUrl</h1>
-              <input
-                v-model="newBook.imageUrl"
-                type="url"
-                class="pl-5 border border-gray-500 p-2 w-full rounded-md"
-                required
-              />
-            </div>
 
-            <div class="modal-action">
-              <button class="btn bg-cyan-400 text-white" type="submit">
-                Submit
-              </button>
-              <button
-                class="btn bg-gray-400 text-white"
-                type="button"
-                @click="cancelCreate"
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </dialog>
+      <Book
+        :books="books"
+        :isEditing="isEditing"
+        :selectBooks="selectBooks"
+        :date="date"
+        :time="time"
+      />
+
+      <ModalForm @handle-create="books.push($event)" />
     </div>
   </div>
 </template>
