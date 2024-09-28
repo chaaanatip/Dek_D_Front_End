@@ -1,6 +1,6 @@
-# dekd
+# Dek-d Homework
 
-website bookList
+Website bookList
 
 ## Recommended IDE Setup
 
